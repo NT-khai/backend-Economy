@@ -34,6 +34,10 @@ export class AuthService {
       throw new UnauthorizedException('Mat Khau khong chinh xac');
     }
 
+    if (checkEmail.active === false) {
+      throw new UnauthorizedException('Tài khoản đã bị vô hiệu hóa');
+    }
+
     const payload: PayloadDto = {
       id: checkEmail.id,
       full_name: checkEmail.full_name,
@@ -77,8 +81,25 @@ export class AuthService {
 
   async getProfile(id: number) {
     const user = await this.prisma.users.findUnique({
-      where: { id: id },
+      where: { id },
+      select: {
+        id: true,
+        full_name: true,
+        email: true,
+        role: true,
+        active: true,
+        created_at: true,
+      },
     });
     return user;
+  }
+
+  sanitizePayload(user: PayloadDto) {
+    return {
+      id: user.id,
+      full_name: user.full_name,
+      role: user.role,
+      active: user.active,
+    };
   }
 }
