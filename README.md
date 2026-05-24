@@ -57,7 +57,7 @@ $ npm run test:e2e
 $ npm run test:cov
 
 # .env
-$ react
+$ create connect with mysql and KEY token
 ```
 
 ## Deployment
